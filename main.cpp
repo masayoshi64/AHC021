@@ -353,7 +353,11 @@ double value(int x1, int y1, mat<int>& dp, int swap_count){
     return -dp[x1][y1];
 }
 
-int main() {
+int main(int argc, char *argv[]) {
+    int max_depth = 5;
+    if (argc == 2) {
+        max_depth = stod(argv[1]);
+    }
     cin.tie(0);
     ios::sync_with_stdio(0);
     cout << setprecision(30) << fixed;
@@ -380,7 +384,7 @@ int main() {
             int y3 = y1 - 1;
             int ball = b[x1][y1];
             mat<int> dp(n, vi(n, inf));
-            calc_cost(x1, y1, ball, dp, 5);
+            calc_cost(x1, y1, ball, dp, max_depth);
 
             // x2とx3のどっちを優先するか
             if(is_inside(x2, y2) && is_inside(x3, y3) && value(x2, y2, dp, swap_count) < value(x3, y3, dp, swap_count)){
@@ -403,6 +407,7 @@ int main() {
     }
 
     print(swap_count);
+    cerr << swap_count << endl;
     rep(i, swap_count){
         int x1, y1, x2, y2;
         tie(x1, y1, x2, y2) = swap_hist[i];
