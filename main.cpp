@@ -326,6 +326,33 @@ bool is_inside(int x, int y){
     return !(x < 0 || x >= n || y < 0 || y > x);
 }
 
+void calc_cost(int x1, int y1, int ball, mat<int>& dp, int depth = 1){
+    if(dp[x1][y1] != inf) return;
+    int x2 = x1 - 1;
+    int y2 = y1;
+    int x3 = x1 - 1;
+    int y3 = y1 - 1;
+    bool right = is_inside(x2, y2) && b[x2][y2] > ball;
+    bool left = is_inside(x3, y3) && b[x3][y3] > ball;
+    if((!right && !left) || depth == 0){
+        dp[x1][y1] = -b[x1][y1];
+        return;
+    }
+    if(right){
+        calc_cost(x2, y2, ball, dp, depth-1);
+        chmin(dp[x1][y1], dp[x2][y2] + 5000 - b[x1][y1]);
+    }
+    if(left){
+        calc_cost(x3, y3, ball, dp, depth-1);
+        chmin(dp[x1][y1], dp[x3][y3] + 5000 - b[x1][y1]);
+    }
+    return ;
+}
+
+double value(int x1, int y1, mat<int>& dp, int swap_count){
+    return -dp[x1][y1];
+}
+
 int main() {
     cin.tie(0);
     ios::sync_with_stdio(0);
@@ -351,8 +378,12 @@ int main() {
             int y2 = y1;
             int x3 = x1 - 1;
             int y3 = y1 - 1;
+            int ball = b[x1][y1];
+            mat<int> dp(n, vi(n, inf));
+            calc_cost(x1, y1, ball, dp, 5);
 
-            if(is_inside(x2, y2) && is_inside(x3, y3) && b[x2][y2] < b[x3][y3]){
+            // x2とx3のどっちを優先するか
+            if(is_inside(x2, y2) && is_inside(x3, y3) && value(x2, y2, dp, swap_count) < value(x3, y3, dp, swap_count)){
                 swap(x2, x3);
                 swap(y2, y3);
             }
