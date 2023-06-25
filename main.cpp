@@ -330,7 +330,7 @@ int main() {
     cin.tie(0);
     ios::sync_with_stdio(0);
     cout << setprecision(30) << fixed;
-    
+
     rep(i, n) rep(j, i+1) {
         cin >> b[i][j];
     }
@@ -351,6 +351,11 @@ int main() {
             int y2 = y1;
             int x3 = x1 - 1;
             int y3 = y1 - 1;
+
+            if(is_inside(x2, y2) && is_inside(x3, y3) && b[x2][y2] < b[x3][y3]){
+                swap(x2, x3);
+                swap(y2, y3);
+            }
 
             if(is_inside(x2, y2) && b[x2][y2] > b[x1][y1]){
                 swap_ball(x1, y1, x2, y2);
